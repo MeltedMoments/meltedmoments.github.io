@@ -14,9 +14,11 @@ log = logging_utils.log
 
 def parse_args():
     program_description = f"Merge annotations from a CSV file with all tasks for the IMDB project. This is useful for merging annotations from multiple rounds of labeling, or after changing the labelling configuration."
-    annotations_file = 'annotations.csv'
-    all_tasks_file = 'all_tasks.csv'
-    output_path = 'merged_annotations.json'
+    datadir = 'data'
+    # Default file names
+    annotations_file = f"{datadir}/annotations.csv"
+    all_tasks_file = f"{datadir}/all_tasks.csv"
+    output_path = f"{datadir}/merged_annotations.json"
 
     parser = argparse.ArgumentParser(description=program_description,
                                      formatter_class=argparse.RawTextHelpFormatter)
@@ -69,9 +71,19 @@ logging_utils.reconfigure_logging(loglevel=log_level, logfile=log_filename)
 # Read the annotnations from the CSV file   
 # and store them in a dictionary
 def read_annotations(file_path:str):
+    # Make sure the file exists
+    try:
+        with open(file_path, 'r') as f:
+            pass
+    except FileNotFoundError:
+        log.error(f"File not found: {file_path}")
+        raise
+    except Exception as e:
+        log.error(f"Error opening file: {file_path}")
+        raise   
+    
     annotations = {}
     with open(file=file_path, mode='r') as csvfile:
-
         reader = csv.DictReader(csvfile)
         for row in reader:
             task_id = row['id']
@@ -83,7 +95,7 @@ def read_annotations(file_path:str):
                 'notes': notes,
                 'highlight': json.loads(highlight) if highlight else []
             }
-            print(annotations[task_id])
+            log.debug(f"{annotations[task_id]}")
     return annotations
 
 
@@ -118,33 +130,32 @@ def format_annotation(annotation:dict):
     }
     return result
 
-"""
-  # annotations are not required and are the list of annotation results matching the labeling config schema
-  "annotations": [{
-    "result": [{
-      "from_name": "sentiment_class",
-      "to_name": "message",
-      "type": "choices",
-      "readonly": false,
-      "hidden": false,
-      "value": {
-        "choices": ["Positive"]
-      }
-    }]
-  }],
-"""
-
-
 def merge_annotations(annotations:dict, all_tasks:list):
-    print(f"Annotations: {annotations}")
+    """
+    Merge the annotations with the all tasks
+    The annotations are stored in a dictionary with the task id as the key
+    
+    Args:
+        annotations (dict): The annotations dictionary
+        all_tasks (list): The list of all tasks
+    Returns:
+        merged_tasks (list): The list of all tasks with the annotations merged
+    """
     merged_tasks = []
     for task in all_tasks:
+        results = []
         task_id = task['data']['id']
         if task_id in annotations and annotations[task_id]:
+            log.debug(f"Found task {task_id} in annotations")
             # Merge the annotations with the task data
             result = format_annotation(annotations[task_id])
-            task['data'].update(annotations[task_id])
-            print(task['data'])
+            results.append(result)
+            task['annotations'] = [{
+                "result": results,
+                "completed_by": 1,
+            }]
+            # task['data'].update(annotations[task_id])
+            log.debug(f"Merged task:\n{task}")
         merged_tasks.append(task)
     return merged_tasks
 
@@ -156,18 +167,24 @@ def main_loop():
     all_tasks_file = cmdline_args.all_tasks_file
     output_path = cmdline_args.output_file
     log.info(f"Reading annotations from {annotations_file}")
-    log.info(f"Reading all tasks from {all_tasks_file}")
-    log.verbose(f"Writing merged annotations to {output_path}")    
+    log.info(f"Reading all-tasks from {all_tasks_file}")
+    log.info(f"Writing merged-annotations to {output_path}")    
 
     # # Read the annotations from the CSV file
-    # annotations = read_annotations(annotations_file)
-    # all_tasks = read_all_tasks(all_tasks_file)
-    # merged_tasks = merge_annotations(annotations, all_tasks)
+    annotations = read_annotations(annotations_file)
+    all_tasks = read_all_tasks(all_tasks_file)
+    log.info(f"Read {len(annotations)} annotations from {annotations_file}")
+    log.info(f"Read {len(all_tasks)} tasks from {all_tasks_file}")
+    # log.info(f"First task: {all_tasks[0]}")
+    merged_tasks = merge_annotations(annotations=annotations, 
+                                     all_tasks=all_tasks)
+    log.info(f"Merged {len(merged_tasks)} tasks with annotations")
+    # log.info(f"merged tasks: {merged_tasks}")
 
-    # # Write the merged annotations to a JSON file
-    # with open(output_path, 'w') as jsonfile:
-    #     json.dump(merged_tasks, jsonfile, indent=4)
-    # print(f"Merged annotations saved to {output_path}")
+    # Write the merged annotations to a JSON file
+    with open(output_path, 'w') as jsonfile:
+        json.dump(merged_tasks, jsonfile, indent=4)
+    log.info(f"Merged annotations saved to {output_path}")
 
 
 if __name__ == "__main__":
