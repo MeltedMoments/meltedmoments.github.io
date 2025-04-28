@@ -30,7 +30,7 @@ Where to find images?
 
 Use Label Studio to attach an ML tool? 
 
-Label Studio gotchas
+## Label Studio gotchas
 - Try and get the labelling UI interface correct from the beginning. Changing things like the field names, or region labels will mess up any annotations already made. 
 
 How to avoid manually redoing the annotations? Plan of attack?
@@ -41,13 +41,3 @@ How to avoid manually redoing the annotations? Plan of attack?
 - import the labelstudio.md (don't forget to make the changes first)
 - then import the edited annotedata
 
-Token: 
-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6ODA1Mjk2MzgxNiwiaWF0IjoxNzQ1NzYzODE2LCJqdGkiOiI5NWI0YmE1YTkyMjQ0ZmE4ODIwMDdhM2Q0YmEwZWYzNyIsInVzZXJfaWQiOjF9._kRiK7WUOUS46sQJ5lxVledc35gpJ7HP38FGwBhgMZo
-```shell
-
-curl http://localhost:8080/api/projects/ -H "Authorization: Token  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6ODA1Mjk2MjE1MCwiaWF0IjoxNzQ1NzYyMTUwLCJqdGkiOiI2MDUzZTc2ZWM3YTY0NTFjOGE2MjRiNjI5NzBiMTY3NiIsInVzZXJfaWQiOjF9.jateRvvQ6yvLsIs7_x2pzNQ6EDZTp3v7iMQdcD8CXtc"
-
-curl -X <method> http://http://localhost:8080/api/<endpoint> -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6ODA1Mjk2MjE1MCwiaWF0IjoxNzQ1NzYyMTUwLCJqdGkiOiI2MDUzZTc2ZWM3YTY0NTFjOGE2MjRiNjI5NzBiMTY3NiIsInVzZXJfaWQiOjF9.jateRvvQ6yvLsIs7_x2pzNQ6EDZTp3v7iMQdcD8CXtc
-'
-
-```
