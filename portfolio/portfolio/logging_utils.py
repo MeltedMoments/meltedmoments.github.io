@@ -30,9 +30,13 @@ log = logging.getLogger(__name__)
 # Set up default logging configuration, by checking *this* module's logger
 if not log.hasHandlers():       
     logging.basicConfig(
-        level = logging.DEBUG,
+        level = logging.INFO,
         format = "%(asctime)s [%(levelname).4s] %(message)s"
     )
+
+# Suppress HTTP logs
+for noisy_logger in ("httpx", "urllib3", "requests"):
+    logging.getLogger(noisy_logger).setLevel(logging.WARNING)
 
 
 def reconfigure_logging(loglevel=logging.INFO, logfile=None, format=None):
