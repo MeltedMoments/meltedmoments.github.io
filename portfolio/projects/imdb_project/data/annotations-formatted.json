@@ -1,0 +1,78 @@
+[
+   {
+      "id":99,
+      "annotations":[
+         {
+            "id":52,
+            "completed_by":1,
+            "result":[
+               {
+                  "value":{
+                     "choices":[
+                        "Positive"
+                     ]
+                  },
+                  "id":"54LfEp871K",
+                  "from_name":"sentiment",
+                  "to_name":"text",
+                  "type":"choices",
+                  "origin":"manual"
+               }
+            ],
+            "was_cancelled":false,
+            "ground_truth":false,
+            "created_at":"2025-04-26T16:09:11.621391Z",
+            "updated_at":"2025-04-26T16:09:11.621403Z",
+            "draft_created_at":"2025-04-26T16:02:51.290203Z",
+            "lead_time":39.103,
+            "prediction":{
+               
+            },
+            "result_count":1,
+            "unique_id":"8757857b-3f09-4d8b-96d0-ff7ef2a26802",
+            "import_id":null,
+            "last_action":null,
+            "bulk_created":false,
+            "task":99,
+            "project":3,
+            "updated_by":1,
+            "parent_prediction":null,
+            "parent_annotation":null,
+            "last_created_by":null
+         }
+      ],
+      "file_upload":"c8ab71c1-IMDB_train_unlabeled_100.csv",
+      "drafts":[
+         
+      ],
+      "predictions":[
+         
+      ],
+      "data":{
+         "uid":25000,
+         "id":27297,
+         "stars":0,
+         "review":"This movie is so bad, you can't help but laugh. The dialogue is horrible, the acting is horrible, the effects are horrible. It is not scary, but it is a helleva good laugh.",
+         "type":"Train",
+         "filename":".\/train\/unsup\/27297_0.txt",
+         "url":"http:\/\/www.imdb.com\/title\/tt0093855\/usercomments"
+      },
+      "meta":{
+         
+      },
+      "created_at":"2025-04-26T16:02:18.000454Z",
+      "updated_at":"2025-04-26T16:09:11.634735Z",
+      "inner_id":1,
+      "total_annotations":1,
+      "cancelled_annotations":0,
+      "total_predictions":0,
+      "comment_count":0,
+      "unresolved_comment_count":0,
+      "last_comment_updated_at":null,
+      "project":3,
+      "updated_by":1,
+      "comment_authors":[
+         
+      ]
+   }
+]

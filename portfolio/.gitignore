@@ -1,0 +1,8 @@
+# Tells git which project files/directories to ignore/exclude
+
+# ignore all files in these dirs
+.idea/
+pythonProject/
+__pycache__/
+*.egg-info
+*.log
