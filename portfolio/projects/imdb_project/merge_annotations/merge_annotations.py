@@ -152,9 +152,9 @@ def merge_annotations(annotations:dict, all_tasks:list):
 # Main function to read the annotations, merge them with all tasks, and save to a JSON file
 def main_loop():
     # Define the file paths
-    annotations_file = 'test-annotations.csv'
-    all_tasks_file = 'all_tasks.csv'
-    output_path = 'merged_annotations.json'
+    annotations_file = cmdline_args.annotations_file
+    all_tasks_file = cmdline_args.all_tasks_file
+    output_path = cmdline_args.output_file
     log.info(f"Reading annotations from {annotations_file}")
     log.info(f"Reading all tasks from {all_tasks_file}")
     log.verbose(f"Writing merged annotations to {output_path}")    

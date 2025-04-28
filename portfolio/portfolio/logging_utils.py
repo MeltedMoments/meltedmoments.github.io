@@ -47,7 +47,8 @@ def reconfigure_logging(loglevel=logging.INFO, logfile=None, format=None):
     """
     format = format or "%(asctime)s [%(levelname).4s] %(message)s"
 
-    # Remove old handlers
+    # Remove old handlers from the root logger
+    log = logging.getLogger()
     for handler in log.handlers[:]:
         log.removeHandler(handler)
 
