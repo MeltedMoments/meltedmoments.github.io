@@ -3,19 +3,75 @@
 # from Label Studio, specifically for the IMDB dataset. 
 # This is useful for merging annotations from multiple rounds of labeling, 
 # or after changing the labelling configuration.
-
+import argparse
 import csv
 import json
+import logging
 
 import portfolio.logging_utils as logging_utils
-
 log = logging_utils.log
+
+
+def parse_args():
+    program_description = f"Merge annotations from a CSV file with all tasks for the IMDB project. This is useful for merging annotations from multiple rounds of labeling, or after changing the labelling configuration."
+    annotations_file = 'annotations.csv'
+    all_tasks_file = 'all_tasks.csv'
+    output_path = 'merged_annotations.json'
+
+    parser = argparse.ArgumentParser(description=program_description,
+                                     formatter_class=argparse.RawTextHelpFormatter)
+
+    # input filename
+    parser.add_argument("--annotations-file",  
+                        required=False, 
+                        default=annotations_file,
+                        help=f"Name of the annotation CSV file [{annotations_file}]. The CSV file should contain the following columns: id, sentiment, notes, highlight.")
+    parser.add_argument("--all-tasks-file", 
+                        required=False, 
+                        default=all_tasks_file,
+                        help=f"Name of the all tasks CSV file [{all_tasks_file}]. The CSV file should contain the following columns: id, review, filename, url.")
+    parser.add_argument("--output-file",    
+                        required=False, 
+                        default=output_path,
+                        help=f"Name of the output JSON file [{output_path}]. The JSON file will contain the merged annotations.")
+    
+    # Logging parameters: log file and loglevel
+    logparams = parser.add_argument_group('Logging options')
+    logparams.add_argument("--logfile", 
+                        default="", 
+                        help=f"Name of the log file, default is logging to the terminal")
+    choices = ["verbose", "debug", "info", "warning", "error", "critical"]
+    logparams.add_argument("--loglevel",
+                        choices=choices,
+                        default="info",
+                        help=f"Set the logging level, default is 'info'")
+
+    args = parser.parse_args()
+
+    # Replace the string entered for the log level with a numeric value 
+    numeric_level = getattr(logging, args.loglevel.upper(), None)
+    if not isinstance(numeric_level, int):
+        raise ValueError(f'Invalid log level: {args.loglevel}')
+
+    args.loglevel = numeric_level
+
+
+    return args
+
+# Configure logging from command line arguments
+# Set it up before any other code is run
+cmdline_args = parse_args()
+log_filename = cmdline_args.logfile 
+log_level = cmdline_args.loglevel
+logging_utils.reconfigure_logging(loglevel=log_level, logfile=log_filename)
+
 
 # Read the annotnations from the CSV file   
 # and store them in a dictionary
 def read_annotations(file_path:str):
     annotations = {}
     with open(file=file_path, mode='r') as csvfile:
+
         reader = csv.DictReader(csvfile)
         for row in reader:
             task_id = row['id']
@@ -101,7 +157,7 @@ def main_loop():
     output_path = 'merged_annotations.json'
     log.info(f"Reading annotations from {annotations_file}")
     log.info(f"Reading all tasks from {all_tasks_file}")
-    log.info(f"Writing merged annotations to {output_path}")    
+    log.verbose(f"Writing merged annotations to {output_path}")    
 
     # # Read the annotations from the CSV file
     # annotations = read_annotations(annotations_file)
