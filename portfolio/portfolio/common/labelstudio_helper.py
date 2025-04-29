@@ -49,19 +49,16 @@ def list_projects():
     Returns:
         list: A list of project objects.
     """
-    # List all projects
     projects = label_studio.projects.list()
-    # print(projects)
-    print(f"  ID   Title             Tasks    Description")
-    print(f"{'=' * 60}")
+    print()
+    print(f"  ID    Title             Tasks   Annot Description")
+    print(f"{'-' * 80}")
     for project in projects:
-        tasks = label_studio.tasks.list(project=project.id)
-        count = sum(1 for _ in tasks)  # This exhausts the iterable
+        nTasks = project.task_number
+        nAnnotations = project.num_tasks_with_annotations
+        print(f" {project.id:3}    {project.title:15}   {nTasks:5}  {nAnnotations:5}  {project.description}")
+    print()
 
-        # print(f"Tasks: {count}")
-        print(f" {project.id:3}    {project.title:15}   {count:5}   {project.description}")
-        # print(project)
-        # log.info(f"Project tasks: {len(project.tasks)}")
     return projects
 
 
