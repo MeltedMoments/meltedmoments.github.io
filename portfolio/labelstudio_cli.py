@@ -1,8 +1,15 @@
-import argparse
-import portfolio.logging_utils as logging_utils
-import portfolio.common.labelstudio_helper as labelstudio
+# label-studio-cli.py
+# Command line interface for Label Studio project management.
+# This script provides commands to list, create, delete projects and tasks in Label Studio.
+# It uses the Label Studio API to perform these operations.
+# The script is designed to be run from the command line and uses the Typer library for argument parsing.
+# The script is part of the portfolio package and uses the logging_utils module for logging.
+
+
 import typer
 from typing_extensions import Annotated
+import portfolio.common.labelstudio_helper as labelstudio
+import portfolio.logging_utils as logging_utils
 
 log = logging_utils.log
 
@@ -20,8 +27,12 @@ def list_projects():
 
 
 @project_app.command("create")
-def create_project(name: Annotated[str, typer.Argument(help="The project title")],
-                   config: Annotated[str, typer.Argument(help="The label configuration XML file")]):
+def create_project(name: 
+                   Annotated[str, typer.Argument(help="The project title", 
+                                                 show_default=False)],
+                   config: 
+                   Annotated[str, typer.Argument(help="The label configuration XML file",
+                                                 show_default=False)]):
     """
     Create a new project in Label Studio.
     """
