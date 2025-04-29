@@ -1,10 +1,11 @@
+from dotenv import load_dotenv
+import os
 from label_studio_sdk import LabelStudio
-from label_studio_sdk.label_interface import LabelInterface
-from label_studio_sdk.label_interface.create import choices
+# from label_studio_sdk.label_interface import LabelInterface
+# from label_studio_sdk.label_interface.create import choices
 
 LABEL_STUDIO_URL = "http://localhost:8080"
-API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6ODA1MzA2MDc2OSwiaWF0IjoxNzQ1ODYwNzY5LCJqdGkiOiIxY2ZhZGFiYWY3ZDE0NDcxOTllZGE1NGI1NTdjNWFjMiIsInVzZXJfaWQiOjF9.VDUStRpZS8xy1oyxr5ViRtivS1AlMe8vmF5qU9mYNcU"
-
+API_KEY = os.getenv("LABELSTUDIO_APIKEY")
 
 label_studio = LabelStudio(
     api_key=API_KEY,
