@@ -1,16 +1,18 @@
 from dotenv import load_dotenv
 import os
 from label_studio_sdk import LabelStudio
-# from label_studio_sdk.label_interface import LabelInterface
-# from label_studio_sdk.label_interface.create import choices
+import portfolio.logging_utils as logging_utils
 
-LABEL_STUDIO_URL = "http://localhost:8080"
-API_KEY = os.getenv("LABELSTUDIO_APIKEY")
+log = logging_utils.log
 
-label_studio = LabelStudio(
-    api_key=API_KEY,
-)
+# load api key from .env file
+load_dotenv()
+API_KEY = os.getenv("LABEL_STUDIO_API_KEY")
+if API_KEY is None:
+    raise ValueError("LABEL_STUDIO_API_KEY environment variable not set. Please set it in your .env file.")
 
+# Connect to Label Studio
+label_studio = LabelStudio(api_key=API_KEY)
 
 # Create a project with the specified title and labeling configuration
 def create_project(title:str, label_config_file:str):
