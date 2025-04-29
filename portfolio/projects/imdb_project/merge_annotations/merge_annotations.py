@@ -108,7 +108,7 @@ def read_all_tasks(file_path:str):
             task = {
                 "data": {
                     "id": row['id'],
-                    "review_text": row['review'],       # must match LS config
+                    "review": row['review'],       # must match LS config
                     "filename": row['filename'],
                     "url": row['url'],
                 }
@@ -118,6 +118,8 @@ def read_all_tasks(file_path:str):
 
 
 def format_annotation(annotation:dict):
+    log.info(f"Formatting annotation: {annotation}")
+    # result = []
     result = {
         "from_name": "sentiment",
         "to_name": "review_text",
@@ -128,6 +130,17 @@ def format_annotation(annotation:dict):
             "choices": [annotation['sentiment']]
         }
     }
+    # if annotation['notes']:
+    #     result.append({
+    #         "from_name": "notes",
+    #         "to_name": "review_text",
+    #         "type": "textarea",
+    #         "readonly": False,
+    #         "hidden": False,
+    #         "value": {
+    #             "text": annotation['notes']
+    #         }
+    #     })
     return result
 
 def merge_annotations(annotations:dict, all_tasks:list):
@@ -156,6 +169,7 @@ def merge_annotations(annotations:dict, all_tasks:list):
             }]
             # task['data'].update(annotations[task_id])
             log.debug(f"Merged task:\n{task}")
+            log.debug(json.dumps(task, indent=2))
         merged_tasks.append(task)
     return merged_tasks
 
@@ -178,8 +192,7 @@ def main_loop():
     # log.info(f"First task: {all_tasks[0]}")
     merged_tasks = merge_annotations(annotations=annotations, 
                                      all_tasks=all_tasks)
-    log.info(f"Merged {len(merged_tasks)} tasks with annotations")
-    # log.info(f"merged tasks: {merged_tasks}")
+    log.info(f"Merged {len(annotations)} annotations with {len(merged_tasks)} tasks")
 
     # Write the merged annotations to a JSON file
     with open(output_path, 'w') as jsonfile:

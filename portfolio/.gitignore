@@ -6,3 +6,5 @@ pythonProject/
 __pycache__/
 *.egg-info
 *.log
+
+.env
