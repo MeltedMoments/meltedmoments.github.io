@@ -52,10 +52,14 @@ def list_projects():
     # List all projects
     projects = label_studio.projects.list()
     # print(projects)
-    print(f"   ID   Title")
-    print(f"===================")
+    print(f"  ID   Title             Tasks    Description")
+    print(f"{'=' * 60}")
     for project in projects:
-        print(f" {project.id:3}    {project.title}")
+        tasks = label_studio.tasks.list(project=project.id)
+        count = sum(1 for _ in tasks)  # This exhausts the iterable
+
+        # print(f"Tasks: {count}")
+        print(f" {project.id:3}    {project.title:15}   {count:5}   {project.description}")
         # print(project)
         # log.info(f"Project tasks: {len(project.tasks)}")
     return projects
